@@ -1,1 +1,25 @@
-
+{
+  "name": "Wasserstoff",
+  "version": "1.0.0",
+  "description": "Description of your project",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",   // Command to start the development server
+    "build": "react-scripts build",   // Command to build the project for production
+    "test": "react-scripts test",     // Command to run tests
+    "eject": "react-scripts eject"    // Command to eject from create-react-app setup
+  },
+  "keywords": [],
+  "author": "Saksham Sharma",
+  "license": "MIT",                   // License type
+  "dependencies": {
+    "react": "^17.0.2",               // React library
+    "react-dom": "^17.0.2",           // React DOM library
+    "axios": "^0.21.4"                // HTTP client for making API requests (optional)
+  },
+  "devDependencies": {
+    "react-scripts": "^5.0.0",        // React scripts for development
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/jest-dom": "^5.14.1"
+  }
+}
