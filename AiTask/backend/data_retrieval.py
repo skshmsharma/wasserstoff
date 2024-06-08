@@ -8,7 +8,9 @@ def fetch_data(api_url):
 
 def extract_text(post):
     # Extract relevant text content from the WordPress post JSON
-    return post.get('content', '')
+    title = post.get('title', {}).get('rendered', '')
+    content = post.get('content', {}).get('rendered', '')
+    return f"{title} {content}"
 
 # Example usage
 # api_url = 'https://example.com/wp-json/wp/v2/posts'
