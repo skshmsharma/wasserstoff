@@ -1,14 +1,10 @@
 from transformers import RagTokenizer, RagRetriever, RagSequenceForGeneration
 
-def initialize_rag_model():
-    tokenizer = RagTokenizer.from_pretrained("facebook/rag-token-nq")
-    retriever = RagRetriever.from_pretrained("facebook/rag-token-nq", index_name="exact", use_dummy_dataset=True)
-    model = RagSequenceForGeneration.from_pretrained("facebook/rag-token-nq", retriever=retriever)
-    return tokenizer, model
+tokenizer = RagTokenizer.from_pretrained("facebook/rag-token-nq")
+retriever = RagRetriever.from_pretrained("facebook/rag-token-nq", index_name="exact", use_dummy_dataset=True)
+model = RagSequenceForGeneration.from_pretrained("facebook/rag-token-nq", retriever=retriever)
 
 def process_query_with_chain_of_thought(user_query, previous_context):
-    tokenizer, model = initialize_rag_model()
-
     # Concatenate the previous context if available
     context = f"{previous_context} {user_query}" if previous_context else user_query
 
@@ -36,7 +32,3 @@ def refine_response_based_on_thought_steps(thought_steps):
     # Combine reasoning steps to form the final response
     refined_response = " ".join(thought_steps)
     return refined_response
-
-# Example usage
-# response = process_query_with_chain_of_thought("What's the weather today?", "Yesterday was sunny.")
-# print(response)
