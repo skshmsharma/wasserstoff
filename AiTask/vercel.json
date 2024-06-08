@@ -1,8 +1,4 @@
 {
-  "projects": {
-    "name": "chatbot",
-    "rootDirectory": "./AiTask"
-  },
   "builds": [
     {
       "src": "AiTask/frontend/package.json",
