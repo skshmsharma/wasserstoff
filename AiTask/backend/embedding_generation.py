@@ -1,13 +1,13 @@
-
 from sentence_transformers import SentenceTransformer
+import faiss
+
+model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 def generate_embeddings(texts):
-    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
     embeddings = model.encode(texts)
     return embeddings
 
 def create_vector_database(embeddings):
-    import faiss
     index = faiss.IndexFlatL2(embeddings.shape[1])
     index.add(embeddings)
     return index
