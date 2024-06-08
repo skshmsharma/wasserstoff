@@ -1,17 +1,17 @@
 {
   "builds": [
     {
+      "src": "AiTask/backend/main.py",
+      "use": "@vercel/python"
+    },
+    {
       "src": "AiTask/frontend/package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "build" }
-    },
-    {
-      "src": "AiTask/backend/main.py",
-      "use": "@vercel/python"
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/AiTask/backend/main.py" },
-    { "src": "/(.*)", "dest": "/AiTask/frontend/build/$1" }
+    { "src": "/api/(.*)", "dest": "AiTask/backend/main.py" },
+    { "src": "/(.*)", "dest": "AiTask/frontend/build/$1" }
   ]
 }
