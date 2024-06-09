@@ -1,39 +1,48 @@
-document.getElementById("chat-form").addEventListener("submit", async function(event) {
-    event.preventDefault();
-    const userInput = document.getElementById("user-input").value;
-    if (userInput.trim() === "") return;
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-    const messagesDiv = document.getElementById("messages");
-    const userMessage = document.createElement("div");
-    userMessage.className = "message user-message";
-    userMessage.textContent = userInput;
-    messagesDiv.appendChild(userMessage);
+const Chatbot = () => {
+    const [query, setQuery] = useState('');
+    const [messages, setMessages] = useState([]);
 
-    const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "previous-context": getPreviousContext()
-        },
-        body: JSON.stringify({ message: userInput })
-    });
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (query.trim() === '') return;
 
-    const data = await response.json();
-    const botMessage = document.createElement("div");
-    botMessage.className = "message bot-message";
-    botMessage.textContent = data.reply;
-    messagesDiv.appendChild(botMessage);
+        const userMessage = { type: 'user', text: query };
+        setMessages((prevMessages) => [...prevMessages, userMessage]);
 
-    document.getElementById("user-input").value = "";
-    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-});
+        try {
+            const response = await axios.post('/api/chat', { message: query }, {
+                headers: { "previous-context": messages.map(msg => msg.text).join(' ') }
+            });
+            const botMessage = { type: 'bot', text: response.data.reply };
+            setMessages((prevMessages) => [...prevMessages, botMessage]);
+        } catch (error) {
+            console.error('Error querying the API', error);
+        }
+        setQuery('');
+    };
 
-function getPreviousContext() {
-    const messagesDiv = document.getElementById("messages");
-    const messages = messagesDiv.querySelectorAll(".message");
-    let context = "";
-    messages.forEach(message => {
-        context += message.textContent + " ";
-    });
-    return context.trim();
-}
+    return (
+        <div id="chat-container">
+            <div id="chat-window">
+                {messages.map((msg, index) => (
+                    <div key={index} className={`message ${msg.type}-message`}>{msg.text}</div>
+                ))}
+            </div>
+            <form id="chat-form" onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    id="user-input"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Type your message here..."
+                />
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    );
+};
+
+export default Chatbot;
